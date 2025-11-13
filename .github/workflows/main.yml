@@ -1,4 +1,4 @@
-name: CI
+name: MS
 on:
   schedule:
     - cron: "*/5 * * * *"
@@ -23,7 +23,7 @@ jobs:
 
     defaults:
       run:
-        shell: bash -l -o pipefail
+        shell: bash -l -o pipefail {0}
 
     steps:
     - name: Checkout
@@ -87,7 +87,6 @@ jobs:
         echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
         sudo apt-get update
         sudo apt-get install -y cloudflare-warp
-        # register/connect are best-effort so the job won't fail if interactive/previously registered
         sudo warp-cli --accept-tos registration new || true
         sudo warp-cli --accept-tos connect || true
         sleep 5
